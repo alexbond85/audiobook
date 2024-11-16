@@ -19,6 +19,7 @@ class Subtitle:
     text : str
         The subtitle text.
     """
+
     index: int
     start_time: float
     end_time: float
@@ -36,7 +37,8 @@ class Subtitle:
 
 class Subtitles:
     """
-    A container class for managing a list of subtitles with navigation capabilities.
+    A container class for managing a list of subtitles with
+    navigation capabilities.
 
     Attributes
     ----------
@@ -55,7 +57,9 @@ class Subtitles:
         subtitles_list : list[Subtitle]
             List of Subtitle objects to manage.
         """
-        self.subtitles_list = sorted(subtitles_list, key=lambda x: x.start_time)
+        self.subtitles_list = sorted(
+            subtitles_list, key=lambda x: x.start_time
+        )
         self.current_index = 0
 
     def length(self) -> int:
@@ -122,8 +126,8 @@ class Subtitles:
         Returns
         -------
         int
-            The index of the subtitle that should be displayed at the given time,
-            or -1 if no subtitle should be displayed.
+            The index of the subtitle that should be displayed at
+            the given time, or -1 if no subtitle should be displayed.
         """
         for i, subtitle in enumerate(self.subtitles_list):
             if subtitle.start_time <= time <= subtitle.end_time:
@@ -132,7 +136,8 @@ class Subtitles:
 
     def seek_to_time(self, time: float) -> None:
         """
-        Set the current subtitle to the one that should be displayed at the given time.
+        Set the current subtitle to the one that should be
+        displayed at the given time.
 
         Parameters
         ----------
@@ -142,6 +147,9 @@ class Subtitles:
         index = self.find_subtitle_at_time(time)
         if index != -1:
             self.set_to(index)
+
+    def __len__(self):
+        return len(self.subtitles_list)
 
 
 class SubtitlesParser:
@@ -196,7 +204,8 @@ class SubtitlesParser:
                     # Parse timestamp line
                     start_str, end_str = lines[1].split(" --> ")
 
-                    # Combine all remaining lines as text (handles multi-line subtitles)
+                    # Combine all remaining lines as text (handles
+                    # multi-line subtitles)
                     text = "\n".join(lines[2:])
 
                     # Convert timestamps to seconds
@@ -240,16 +249,19 @@ class SubtitlesParser:
             hours, minutes, seconds_milliseconds = time_str.strip().split(":")
             seconds, milliseconds = seconds_milliseconds.split(",")
             return (
-                    int(hours) * 3600
-                    + int(minutes) * 60
-                    + int(seconds)
-                    + int(milliseconds) / 1000.0
+                int(hours) * 3600
+                + int(minutes) * 60
+                + int(seconds)
+                + int(milliseconds) / 1000.0
             )
         except ValueError as e:
-            raise ValueError(f"Invalid time format. Expected HH:MM:SS,ms but got: {time_str}") from e
+            raise ValueError(
+                f"Invalid time format. Expected HH:MM:SS,ms "
+                f"but got: {time_str}"
+            ) from e
 
     @classmethod
-    def from_file(cls, path: str) -> 'Subtitles':
+    def from_file(cls, path: str) -> "Subtitles":
         """
         Create a Subtitles instance from a file.
 
@@ -277,5 +289,3 @@ class SubtitlesParser:
             return Subtitles(parser.value())
         except FileNotFoundError:
             raise FileNotFoundError(f"SRT file not found: {path}")
-        except UnicodeDecodeError:
-            raise UnicodeDecodeError(f"File {path} must be UTF-8 encoded")

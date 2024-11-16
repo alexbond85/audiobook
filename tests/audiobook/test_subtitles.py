@@ -1,8 +1,11 @@
-import pytest
 from contextlib import nullcontext as does_not_raise
 from typing import ContextManager
 
-from audiobook.subtitles import Subtitle, Subtitles, SubtitlesParser
+import pytest
+
+from audiobook.subtitles import Subtitle
+from audiobook.subtitles import Subtitles
+from audiobook.subtitles import SubtitlesParser
 
 
 @pytest.fixture
@@ -45,9 +48,13 @@ Invalid time range (end before start).
 @pytest.fixture
 def sample_subtitles():
     return [
-        Subtitle(index=1, start_time=5.0, end_time=8.0, text="Second subtitle"),  # Intentionally out of order
+        Subtitle(
+            index=1, start_time=5.0, end_time=8.0, text="Second subtitle"
+        ),  # Intentionally out of order
         Subtitle(index=2, start_time=1.0, end_time=4.0, text="First subtitle"),
-        Subtitle(index=3, start_time=10.0, end_time=13.0, text="Third subtitle"),
+        Subtitle(
+            index=3, start_time=10.0, end_time=13.0, text="Third subtitle"
+        ),
     ]
 
 
@@ -63,12 +70,12 @@ class TestSubtitle:
         ],
     )
     def test_subtitle_validation(
-            self,
-            index: int,
-            start_time: float,
-            end_time: float,
-            text: str,
-            expectation: ContextManager,
+        self,
+        index: int,
+        start_time: float,
+        end_time: float,
+        text: str,
+        expectation: ContextManager,
     ):
         with expectation:
             Subtitle(
@@ -133,9 +140,13 @@ class TestSubtitles:
         assert subtitles.find_subtitle_at_time(2.0) == 0  # First subtitle
         assert subtitles.find_subtitle_at_time(6.0) == 1  # Second subtitle
         assert subtitles.find_subtitle_at_time(11.0) == 2  # Third subtitle
-        assert subtitles.find_subtitle_at_time(0.0) == -1  # Before first subtitle
+        assert (
+            subtitles.find_subtitle_at_time(0.0) == -1
+        )  # Before first subtitle
         assert subtitles.find_subtitle_at_time(9.0) == -1  # Between subtitles
-        assert subtitles.find_subtitle_at_time(14.0) == -1  # After last subtitle
+        assert (
+            subtitles.find_subtitle_at_time(14.0) == -1
+        )  # After last subtitle
 
     def test_seek_to_time(self, sample_subtitles):
         subtitles = Subtitles(sample_subtitles)
@@ -147,5 +158,7 @@ class TestSubtitles:
         subtitles.seek_to_time(2.0)  # Should find first subtitle
         assert subtitles.current_subtitle().start_time == 1.0
 
-        subtitles.seek_to_time(9.0)  # Time between subtitles, should stay at current position
+        subtitles.seek_to_time(
+            9.0
+        )  # Time between subtitles, should stay at current position
         assert subtitles.current_subtitle().start_time == 1.0
