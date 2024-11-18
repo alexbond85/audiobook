@@ -2,6 +2,8 @@
 
 An application that combines audiobook playback with synchronized text display and translation capabilities.
 
+[Description and AudioReader screenshots](https://www.linkedin.com/pulse/audioreader-app-alexander-bondarenko-hvloe/)
+
 ## Features
 
 - Text display synchronized with audio playback
@@ -10,6 +12,8 @@ An application that combines audiobook playback with synchronized text display a
 - Simple web interface
 - Support for multiple languages
 - SRT subtitle generation from audio using OpenAI's Whisper
+
+[Rest of the README remains exactly the same...]
 
 ## Prerequisites
 
