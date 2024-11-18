@@ -71,8 +71,8 @@ translation:
 
 2. Start the application:
    ```bash
-   python -m audiobook.app
-   ```
+   python gradio_app.py
+   ```gradio_app.py
 
 3. Access the interface:
    - Open `http://localhost:7860`
